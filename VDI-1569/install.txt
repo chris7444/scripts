@@ -1,5 +1,10 @@
 #
-# installer helm
+# install helm client
+# see https://github.com/helm/helm/blob/master/docs/install.md 
+#  tested with v2.9.1
+wget -O /tmp/helm.tar https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz
+(cd /tmp ; tar -xvf helm.tar ; cp linux-amd64/helm /usr/local/bin/helm) 
+
 # configure kubectl client
 cd ~/scripts/ucp
 ./get_bundle.sh
@@ -7,19 +12,32 @@ cd ~/scripts/ucp
 cd $CERTS_DIR
 . env.sh
 
-# lancer la nfs-provisioner
+# Make sure you have the NFS-provisionner started (requirement is anything providing persistent storage)
+# use the playbook k8s-nfs-provisionner.yml
+
+# the playbook k8s-nfs-provisioner.yml creates a storage class named NFS, make it the default storage class
+#
 kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-# Create service accounts
+
+# Create service accounst 'tiller'
 kubectl apply -f rbac-tiller.yaml
 
 # assign full control role to tiller (manually so far)
+# You MUST do this manuallu using the UCP GUI for now
 
-# Create Serverice accounts and grant them with the Full control role (this is a POC)
+# Create Service accounts for prometheus and grafana and grant Full Control to these accounts (this is a POC for now)
 ansible-playbook -i hosts playbooks/k8s-prom.yml
 
 # initialize tiller (using the helm client)
 helm init --service-account=tiller
 
+#
+# install prometheus, we pass the chart parameters, telling it which service accounts to use
+#
 
 helm install stable/prometheus --version 6.7.4 --name prometheus -f prometheus_params.yaml
+
+#
+# install Grafana, telling it which service account(s) to use
+#
 helm install --name grafana stable/grafana --version 1.11.6 -f grafana_params.yaml
