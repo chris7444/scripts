@@ -75,7 +75,7 @@
     - set_fact:
         prom_role: "{{ roles.json | json_query(query) }}"
       vars:
-        query: "[?name == '{{ prom_provisioner_role }}' ].{id: id, name: name }"
+        query: "[?name == '{{ prom_stack.role }}' ].{id: id, name: name }"
 
     - fail:
       when: prom_role | count ==0
@@ -101,7 +101,7 @@
 
     - name: Grant the service account with the role
       uri:
-        url: "https://{{ ucp_instance }}.{{ domain_name }}/collectionGrants/system%3Aserviceaccount%3Adefault%3A{{ item.serviceaccount }}/kubernetesnamespaces/{{ prom_role[0].id }}?type=grantobject"
+        url: "https://{{ ucp_instance }}.{{ domain_name }}/collectionGrants/system%3Aserviceaccount%3A{{ prom_stack.namespace }}%3A{{ item.serviceaccount }}/kubernetesnamespaces/{{ prom_role[0].id }}?type=grantobject"
         headers:
           Content-Type: application/json
           Authorization: Bearer {{ auth_token }}
@@ -111,7 +111,7 @@
         validate_certs: no
         use_proxy: no
       register: roles
-      with_items: "{{ prom_sa }}" 
+      with_items: "{{ prom_stack.accounts }}" 
 
 #
 # deploy Prometheus

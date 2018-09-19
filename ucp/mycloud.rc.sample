@@ -1,6 +1,7 @@
-CLOUD=${CLOUD:-xxx}
-UCP_IP="$CLOUD-ucp.cloudra.local"
-UCP_ADMIN="admin"
+CLOUD=${CLOUD:-clh}
+DOMAIN="cloudra.local" 
+UCP_IP="$CLOUD-ucp.$DOMAIN"
+UCP_ADMIN="Admin"
 UCP_PASSWORD="Just4m3hp"
 CERTS_DIR=~/certs.$CLOUD
-DTR_IP="$CLOUD-dtr.cloudra.local"
+DTR_IP="$CLOUD-dtr.$DOMAIN"

@@ -25,19 +25,24 @@ kubectl apply -f rbac-tiller.yaml
 # assign full control role to tiller (manually so far)
 # You MUST do this manuallu using the UCP GUI for now
 
-# Create Service accounts for prometheus and grafana and grant Full Control to these accounts (this is a POC for now)
+#
+# edit the group_vars/vars file to suit your env (all the required variables are here).
+#
+
+# Create Service accounts required by the prometheus and grafana charts
 ansible-playbook -i hosts playbooks/k8s-prom.yml
 
 # initialize tiller (using the helm client)
 helm init --service-account=tiller
 
 #
-# install prometheus, we pass the chart parameters, telling it which service accounts to use
+# install prometheus, we pass the chart parameters, telling it which service accounts to use, the namespace
+# should be the one specified in group_vars/vars
 #
 
-helm install stable/prometheus --version 6.7.4 --name prometheus -f prometheus_params.yaml
+helm install --namespace monitoring stable/prometheus --version 6.7.4 --name prometheus -f prometheus_params.yaml
 
 #
 # install Grafana, telling it which service account(s) to use
 #
-helm install --name grafana stable/grafana --version 1.11.6 -f grafana_params.yaml
+helm install --namespace monitoring stable/grafana --version 1.11.6 --name grafana -f grafana_params.yaml
