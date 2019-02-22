@@ -7,7 +7,7 @@ script_dir=$(dirname $0)
 #
 # Create the Certificates directory if it does not exists
 #
-[ ! -d $CERTS_DIR ] && mkdir $certs_dir
+[ ! -d $CERTS_DIR ] && mkdir $CERTS_DIR
 
 #
 # Retrive a token for the API
