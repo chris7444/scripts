@@ -1,0 +1,6 @@
+# max number of PVC attached to a single node = 59
+#   because 4 iSCSI controllers MAX
+#   first drive is system disk
+#    15 disks per iSCSI controller
+imax=1
+techno=csi
