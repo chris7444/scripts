@@ -1,0 +1,26 @@
+nodes:
+  - address: 10.15.152.21
+    internal_address: 10.15.152.21
+    user: core
+    role: [controlplane, worker, etcd]
+  - address: 10.15.152.22
+    internal_address: 10.15.152.22
+    user: core
+    role: [controlplane, worker, etcd]
+  - address: 10.15.152.23
+    internal_address: 10.15.152.23
+    user: core
+    role: [controlplane, worker, etcd]
+
+services:
+  etcd:
+    snapshot: true
+    creation: 6h
+    retention: 24h
+
+# Required for external TLS termination with
+# ingress-nginx v0.22+
+ingress:
+  provider: nginx
+  options:
+    use-forwarded-headers: "true"
