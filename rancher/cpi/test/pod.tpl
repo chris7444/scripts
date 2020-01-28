@@ -1,18 +1,5 @@
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: storage-claim${i}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: thin
-  resources:
-    requests:
-      storage: 100Mi
-
----
-apiVersion: v1
 kind: Pod
 metadata:
   name: pod${i}
@@ -35,5 +22,5 @@ spec:
     - while true; do sleep 1; done
     image: radial/busyboxplus:curl
     volumeMounts:
-    - mountPath: /tmp/foo${i}
+    - mountPath: /tmp/foo
       name: pod-data${i}

@@ -18,6 +18,6 @@ do
   done
 
   echo Reading $techno-pod$i
-  kubectl exec -it $pod -- sh -c "cat /tmp/foo/foo.txt"
+  kubectl exec -it $pod -- sh -c "cat /tmp/foo${i}/foo.txt"
 done
 
