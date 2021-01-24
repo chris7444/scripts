@@ -1,9 +1,5 @@
-#
-# Read the psistent volumes
-#
 script_dir=$(dirname $0)
 . ${script_dir}/vars.rc
-
 
 for (( i = 1 ; i <= imax ; i++ ))
 do
@@ -13,11 +9,10 @@ do
   status=$(kubectl get pods $pod -o json | jq -r .status.phase)
   while [ "$status" != "Running" ]
   do
-    echo Waiting for the pod to start
+    Waiting for the pod to start
     status=$(kubectl get pods $pod -o json | jq -r .status.phase)
   done
-
-  echo Reading $techno-pod$i
-  kubectl exec -it $pod -- sh -c "cat /tmp/foo/foo.txt"
+  date=$(date)
+  kubectl exec -it $pod -- sh -c "echo $date $techno pod$i >/tmp/foo/foo.txt"
 done
 

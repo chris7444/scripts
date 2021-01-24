@@ -6,7 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: thin
+  storageClassName: csivols
   resources:
     requests:
       storage: 100Mi
@@ -35,5 +35,5 @@ spec:
     - while true; do sleep 1; done
     image: radial/busyboxplus:curl
     volumeMounts:
-    - mountPath: /tmp/foo${i}
+    - mountPath: /tmp/foo
       name: pod-data${i}
